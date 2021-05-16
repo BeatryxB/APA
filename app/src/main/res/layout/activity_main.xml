@@ -34,7 +34,7 @@
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/FragmentLogin"
-            android:name="com.example.apa.View.Login"
+            android:name="com.example.apa.View.Index.Login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone"
@@ -42,7 +42,7 @@
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/FragmentSignup"
-            android:name="com.example.apa.View.SignUp"
+            android:name="com.example.apa.View.Index.SignUp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone"
@@ -65,13 +65,6 @@
             android:layout_width="match_parent"
             android:layout_height="20dp"
             />
-
-        <Button
-            android:id="@+id/GoToHome"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/button_index"
-            android:text="GoToHome" />
 
     </LinearLayout>
 

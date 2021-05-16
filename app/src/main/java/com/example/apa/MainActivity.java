@@ -8,8 +8,11 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.apa.View.Home.Home;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
+
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,10 +20,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Button SignIn = findViewById(R.id.SignIn);
         Button SignUp = findViewById(R.id.SignUp);
-        Button GoToHome = findViewById(R.id.GoToHome);
         SignIn.setOnClickListener(Signing);
         SignUp.setOnClickListener(Signup);
-        GoToHome.setOnClickListener(Gotohome);
+        mAuth = FirebaseAuth.getInstance();
+        IfLogging();
+
     }
 
     private final View.OnClickListener Signing = new View.OnClickListener() {
@@ -60,13 +64,13 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     };
-    private final View.OnClickListener Gotohome = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
+
+    private void IfLogging(){
+        if (mAuth.getCurrentUser()!=null){
             Intent i = new Intent(getApplicationContext(), Home.class);
             i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             getApplicationContext().startActivity(i);
         }
-    };
+    }
 
 }
