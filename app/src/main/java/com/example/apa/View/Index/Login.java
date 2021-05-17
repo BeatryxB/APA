@@ -68,9 +68,9 @@ public class Login extends Fragment implements View.OnClickListener {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             FirebaseUser user = mAuth.getCurrentUser();
-                            Intent SignUpOkay = new Intent(v.getContext(), Home.class);
-                            SignUpOkay.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            context.startActivity(SignUpOkay);
+                            Intent SignInOkay = new Intent(v.getContext(), Home.class);
+                            SignInOkay.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            context.startActivity(SignInOkay);
                         } else {
                             // If sign in fails, display a message to the user.
                             error.setVisibility(View.VISIBLE);

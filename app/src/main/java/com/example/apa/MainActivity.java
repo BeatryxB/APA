@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
     private void IfLogging(){
         if (mAuth.getCurrentUser()!=null){
             Intent i = new Intent(getApplicationContext(), Home.class);
-            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             getApplicationContext().startActivity(i);
         }
     }
