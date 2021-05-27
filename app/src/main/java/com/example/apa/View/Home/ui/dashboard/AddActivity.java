@@ -1,66 +1,99 @@
 package com.example.apa.View.Home.ui.dashboard;
 
+import android.app.Activity;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
+import com.example.apa.Controller.Home.FirestoreActivity;
+import com.example.apa.Model.Activity.ActivitySport;
 import com.example.apa.R;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link AddActivity#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AddActivity extends Fragment {
+public class AddActivity extends Fragment implements View.OnClickListener{
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private EditText Titre, Duration, Description;
+    private TextView Error;
+    private Button AddActivity;
 
     public AddActivity() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment AddActivity.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static AddActivity newInstance(String param1, String param2) {
+    public static AddActivity newInstance() {
         AddActivity fragment = new AddActivity();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_add_activity, container, false);
+        View mView = inflater.inflate(R.layout.fragment_add_activity, container, false);
+        Titre = mView.findViewById(R.id.TitleActivity);
+        Duration = mView.findViewById(R.id.DurationActivity);
+        Description = mView.findViewById(R.id.DescriptionActivity);
+        AddActivity = mView.findViewById(R.id.AddActivityButton);
+        Error = mView.findViewById(R.id.IfErrorAddActivity);
+        AddActivity.setOnClickListener(this::onClick);
+        return mView;
+    }
+
+    @Override
+    public void onClick(View v) {
+        if(checkiffill()){
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            CollectionReference dbCourses = db.collection("Activity");
+
+            // adding our data to our courses object class.
+            ActivitySport courses = new ActivitySport(Titre.getText().toString(),Duration.getText().toString(), Description.getText().toString());
+
+            // below method is use to add data to Firebase Firestore.
+            dbCourses.add(courses).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                @Override
+                public void onSuccess(DocumentReference documentReference) {
+                    // after the data addition is successful
+                    // we are displaying a success toast message.
+                    Error.setVisibility(View.VISIBLE);
+                    Error.setText("your activity is added");
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    // this method is called when the data addition process is failed.
+                    // displaying a toast message when data addition is failed.
+                    Error.setText(e.getMessage());
+                }
+            });
+        }else{
+            Error.setText("Require all Field complete");
+        }
+    }
+
+    private boolean checkiffill(){
+        return !Titre.getText().toString().equals("") && !Duration.getText().toString().equals("") && !Description.getText().toString().equals("");
     }
 }

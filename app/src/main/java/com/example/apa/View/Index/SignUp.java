@@ -74,6 +74,9 @@ public class SignUp extends Fragment implements View.OnClickListener {
                                     UserProfileChangeRequest profileChangeRequest = new UserProfileChangeRequest.Builder().setDisplayName(FirstName.getText().toString() + " " + LastName.getText().toString()).build();
                                     user.updateProfile(profileChangeRequest);
                                     Intent SignUpOkay = new Intent(v.getContext(), Home.class);
+
+
+
                                     SignUpOkay.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                     context.startActivity(SignUpOkay);
                                 } else {

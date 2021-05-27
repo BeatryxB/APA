@@ -16,4 +16,9 @@ public class HomeViewModel extends ViewModel {
     public LiveData<String> getText() {
         return mText;
     }
+
+    public void setmText(String mText) {
+        this.mText.setValue(mText);
+    }
+
 }
