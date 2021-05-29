@@ -13,6 +13,7 @@ import com.example.apa.View.Home.ui.home.Adapter.SportAdapter;
 import com.example.apa.View.Home.ui.home.HomeFragment;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -25,6 +26,7 @@ public class FirestoreActivity {
     private TextView tv;
     Activity ctx;
     HomeFragment context;
+    FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     public FirestoreActivity(Activity ctx, HomeFragment sc) {
         this.ctx = ctx;
@@ -47,32 +49,16 @@ public class FirestoreActivity {
         SportRv.setAdapter(sportAdapter);
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("Activity").get()
+        db.collection("Activity").whereEqualTo("description","Description").get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        // after getting the data we are calling on success method
-                        // and inside this method we are checking if the received
-                        // query snapshot is empty or not.
                         if (!queryDocumentSnapshots.isEmpty()) {
-                            // if the snapshot is not empty we are
-                            // hiding our progress bar and adding
-                            // our data in a list.
                             List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
                             for (DocumentSnapshot d : list) {
-                                // after getting this list we are passing
-                                // that list to our object class.
                                 ActivitySport c = d.toObject(ActivitySport.class);
-
-                                // and we will pass this object class
-                                // inside our arraylist which we have
-                                // created for recycler view.
                                 ActivitySportList.add(c);
-                                System.out.println(sportAdapter.getItemCount());
                             }
-                            // after adding the data to recycler view.
-                            // we are calling recycler view notifuDataSetChanged
-                            // method to notify that data has been changed in recycler view.
                             sportAdapter.notifyDataSetChanged();
                         } else {
                             // if the snapshot is empty we are displaying a toast message.

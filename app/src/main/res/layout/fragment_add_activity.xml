@@ -8,6 +8,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:orientation="vertical">
 
         <LinearLayout
@@ -31,6 +32,7 @@
                 android:inputType="textPersonName"
                 android:text="Name" />
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -50,8 +52,9 @@
                 android:layout_weight="1"
                 android:ems="10"
                 android:inputType="textMultiLine"
-                android:text="Description"/>
+                android:text="Description" />
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -71,9 +74,10 @@
                 android:layout_weight="1"
                 android:ems="10"
                 android:inputType="numberDecimal"
-                android:text="0,3"/>
+                android:text="0,3" />
 
         </LinearLayout>
+
         <TextView
             android:id="@+id/IfErrorAddActivity"
             android:layout_width="match_parent"
@@ -81,6 +85,7 @@
             android:text="TextView"
             android:visibility="gone"
             tools:visibility="gone" />
+
         <Button
             android:id="@+id/AddActivityButton"
             android:layout_width="wrap_content"

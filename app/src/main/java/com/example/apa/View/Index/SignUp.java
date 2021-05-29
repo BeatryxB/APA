@@ -13,16 +13,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.example.apa.Controller.Index.User;
+import com.example.apa.Model.Activity.ActivitySport;
 import com.example.apa.R;
 import com.example.apa.View.Home.Home;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class SignUp extends Fragment implements View.OnClickListener {
 
@@ -35,6 +44,8 @@ public class SignUp extends Fragment implements View.OnClickListener {
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private Context context;
     private Button signup;
+    private RadioButton med,pat,str;
+    private RadioGroup group;
 
     public SignUp() {
         // Required empty public constructor
@@ -55,6 +66,10 @@ public class SignUp extends Fragment implements View.OnClickListener {
             Email = myView.findViewById(R.id.MailEdit);
             context = getActivity().getApplicationContext();
             error = myView.findViewById(R.id.ErrorSignUp);
+            med = myView.findViewById(R.id.radioMedecin);
+            pat = myView.findViewById(R.id.radioPatient);
+            str = myView.findViewById(R.id.radioStructure);
+            group = myView.findViewById(R.id.RadioView);
             signup = (Button) myView.findViewById(R.id.SignUpButton);
             signup.setOnClickListener(this::onClick);
         return myView;
@@ -71,12 +86,10 @@ public class SignUp extends Fragment implements View.OnClickListener {
                                 if (task.isSuccessful()) {
                                     // Sign in success, update UI with the signed-in user's information
                                     FirebaseUser user = mAuth.getCurrentUser();
+                                    addRole(user.getUid(), user.getEmail());
                                     UserProfileChangeRequest profileChangeRequest = new UserProfileChangeRequest.Builder().setDisplayName(FirstName.getText().toString() + " " + LastName.getText().toString()).build();
                                     user.updateProfile(profileChangeRequest);
                                     Intent SignUpOkay = new Intent(v.getContext(), Home.class);
-
-
-
                                     SignUpOkay.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                     context.startActivity(SignUpOkay);
                                 } else {
@@ -94,6 +107,36 @@ public class SignUp extends Fragment implements View.OnClickListener {
         else{
             error.setText("One field is not set");
         }
+    }
+
+
+    private void addRole(String id, String Mail){
+        String Role;
+        if(med.isChecked()){
+            Role = "Medecin";
+        }else if(pat.isChecked()){
+            Role = "Patient";
+        }else{
+            Role = "Structure";
+        }
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference dbCourses = db.collection(Role);
+
+        // adding our data to our courses object class.
+        User courses = new User(id,Mail);
+
+        // below method is use to add data to Firebase Firestore.
+        dbCourses.add(courses).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+            @Override
+            public void onSuccess(DocumentReference documentReference) {
+                // after the data addition is successful
+                // we are displaying a success toast message.
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+            }
+        });
     }
 
     private boolean generalCheck(){

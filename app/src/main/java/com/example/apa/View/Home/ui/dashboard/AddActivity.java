@@ -1,6 +1,5 @@
 package com.example.apa.View.Home.ui.dashboard;
 
-import android.app.Activity;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,8 +12,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.example.apa.Controller.Home.FirestoreActivity;
 import com.example.apa.Model.Activity.ActivitySport;
+import com.example.apa.Model.Structure.Structure;
 import com.example.apa.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -64,7 +63,7 @@ public class AddActivity extends Fragment implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
-        if(checkiffill()){
+        if(checkIfFill()){
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             CollectionReference dbCourses = db.collection("Activity");
 
@@ -93,7 +92,7 @@ public class AddActivity extends Fragment implements View.OnClickListener{
         }
     }
 
-    private boolean checkiffill(){
+    private boolean checkIfFill(){
         return !Titre.getText().toString().equals("") && !Duration.getText().toString().equals("") && !Description.getText().toString().equals("");
     }
 }
